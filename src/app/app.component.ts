@@ -56,6 +56,8 @@ export class TodoItemCompleteInputCheckbox {
     template: `
     <button (click)="onDeleteAll()" 
     [disabled]="(todoList.length === 0)">Delete All</button>
+    <button (click)="onClear()" 
+    [disabled]="(todoList.length === 0)">Clear</button>
     `,
     selector: 'app-todo-button'
 })
@@ -63,6 +65,11 @@ export class TodoItemRemoveAll {
     onDeleteAll() {
         console.log("button is clicked")
         this.todoStoreService.removeAll()
+    }
+
+    onClear() {
+        console.log("button is clicked")
+        this.todoStoreService.removeDone()
     }
 
     get todoList(): TodoEntity[] {
@@ -129,7 +136,7 @@ export class TodoListComponent {
     template: `
     <div>Count = {{lengthDone}}</div>
     <ul>
-    <li aria-label="time" *ngFor="let todo of todoList">
+    <li aria-label="time" *ngFor="let todo of doneList">
         <span *ngIf="todo.isCompleted" style="text-decoration: line-through;">
             {{todo.title}}
         </span>
@@ -142,6 +149,16 @@ export class TodoListDoneComponent {
 
     get todoList(): TodoEntity[] {
         return this.todoStoreService.todoList;
+    }
+
+    get doneList(): TodoEntity[] {
+        let list : TodoEntity[] = []
+        this.todoStoreService.todoList.forEach(todo => {
+            if (todo.isCompleted === true) {
+                list.push(todo)
+            }
+        });
+        return list
     }
 
     get lengthDone(): number {
@@ -165,7 +182,7 @@ export class TodoListDoneComponent {
     template: `
     <div>Count = {{lengthNotDone}}</div>
     <ul>
-    <li aria-label="time" *ngFor="let todo of todoList">
+    <li aria-label="time" *ngFor="let todo of notDoneList">
         <span *ngIf="!todo.isCompleted">
             {{todo.title}}
         </span>
@@ -178,6 +195,16 @@ export class TodoListNotDoneComponent {
 
     get todoList(): TodoEntity[] {
         return this.todoStoreService.todoList;
+    }
+
+    get notDoneList(): TodoEntity[] {
+        let list : TodoEntity[] = []
+        this.todoStoreService.todoList.forEach(todo => {
+            if (todo.isCompleted === false) {
+                list.push(todo)
+            }
+        });
+        return list
     }
 
     get lengthNotDone(): number {

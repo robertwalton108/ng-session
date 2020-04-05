@@ -48,6 +48,14 @@ export class TodoStoreService {
         })
     }
 
+    removeDone() {
+        this.todoList.forEach((item, idx) => {
+            if (item.isCompleted === true) {
+                this.todoList.splice(idx)
+            }
+        })
+    }
+
     remove(idx: number) {
         this.todoList.splice(idx)
     }
